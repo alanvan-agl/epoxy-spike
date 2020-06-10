@@ -4,10 +4,10 @@ import android.widget.TextView
 import com.alan.epoxyspike.R
 import com.alan.epoxyspike.base.KotlinModel
 
-class EpoxyItem(
+class EpoxyItemType2(
     index: Int,
-    val data: String,
-    val onClickCallback: () -> Unit
+    val data: Int,
+    val onClickCallback: (String) -> Unit
 ) : KotlinModel(R.layout.epoxy_item) {
 
     init {
@@ -17,9 +17,10 @@ class EpoxyItem(
     private val textView: TextView by bind(R.id.textView)
 
     override fun bind() {
-        textView.text = data
+        val value = context!!.getString(R.string.type2, data + 1)
+        textView.text = value
         textView.setOnClickListener {
-            onClickCallback()
+            onClickCallback(value)
         }
     }
 }

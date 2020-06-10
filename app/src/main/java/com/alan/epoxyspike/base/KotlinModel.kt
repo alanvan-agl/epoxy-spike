@@ -12,17 +12,10 @@ import kotlin.reflect.KProperty
 
 /**
  * A pattern for using epoxy models with Kotlin with no annotations or code generation.
- *
- * See [SampleKotlinModel] for a usage example.
  */
 abstract class KotlinModel(
     @LayoutRes private val layoutRes: Int
 ) : EpoxyModel<View>() {
-
-    companion object {
-        // Use a centralized map so that we don't end up tracking modified margins.
-        private val marginMap = mutableMapOf<Int, Rect>()
-    }
 
     private data class NestedViewBindingId(@IdRes val parentId: Int, @IdRes val childId: Int)
 
@@ -34,35 +27,18 @@ abstract class KotlinModel(
     var isBound = false
         private set
 
-    private var onBindListener: ((view: View) -> Unit)? = null
-    private var onClickListener: (() -> Unit)? = null
-
     abstract fun bind()
 
     final override fun bind(view: View) {
-        if (!marginMap.containsKey(layoutRes)) {
-            recordDefaultMargins(layoutRes, view)
-        } else {
-            applyDefaultMargins(layoutRes, view)
-        }
-
         viewBindings.clear()
         this.view = view
         bind()
         isBound = true
-        onBindListener?.invoke(view)
-
-        if (onClickListener != null) {
-            view.setOnClickListener { onClickListener!!() }
-        } else {
-            view.isClickable = false
-        }
     }
 
     open fun unbind() {}
 
     final override fun unbind(view: View) {
-        // Epoxy can call unbind on a model that's not been bound so double check before we make any calls.
         if (isBound) {
             unbind()
             isBound = false
@@ -83,7 +59,7 @@ abstract class KotlinModel(
         }
     }
 
-    protected fun <V : View> bind(@IdRes parentId: Int, @IdRes childId: Int) =
+    protected open fun <V : View> bind(@IdRes parentId: Int, @IdRes childId: Int) =
         object : ReadOnlyProperty<KotlinModel, V> {
 
             override fun getValue(thisRef: KotlinModel, property: KProperty<*>): V {
@@ -113,29 +89,4 @@ abstract class KotlinModel(
         }
 
     protected fun <V : View> bind(@IdRes id: Int) = bind<V>(View.NO_ID, id)
-
-    fun fillSpan(): KotlinModel =
-        spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount } as KotlinModel
-
-    private fun recordDefaultMargins(id: Int, view: View) {
-        val marginLayoutParams = view.layoutParams as ViewGroup.MarginLayoutParams
-        val marginDefaults = Rect(
-            marginLayoutParams.marginStart,
-            marginLayoutParams.topMargin,
-            marginLayoutParams.marginEnd,
-            marginLayoutParams.bottomMargin
-        )
-        marginMap[id] = marginDefaults
-    }
-
-    private fun applyDefaultMargins(id: Int, view: View) {
-        marginMap.get(id)?.let { marginDefaults ->
-            val marginLayoutParams = view.layoutParams as ViewGroup.MarginLayoutParams
-            marginLayoutParams.marginStart = marginDefaults.left
-            marginLayoutParams.topMargin = marginDefaults.top
-            marginLayoutParams.marginEnd = marginDefaults.right
-            marginLayoutParams.bottomMargin = marginDefaults.bottom
-            view.layoutParams = marginLayoutParams
-        }
-    }
 }

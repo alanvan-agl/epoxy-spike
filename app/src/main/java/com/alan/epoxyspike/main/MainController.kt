@@ -40,11 +40,11 @@ class MainController : Controller(), MainContract.View, MainAdapter.ActionListen
         presenter.onDetach()
     }
 
-    override fun displayData(dataList: List<String>) {
+    override fun displayData(dataList: List<Int>) {
         adapter.setData(dataList)
     }
 
-    override fun onItemClicked(index: Int) {
-        Toast.makeText(this.applicationContext, (index + 1).toString(), Toast.LENGTH_SHORT).show()
+    override fun onItemClicked(itemValue: String) {
+        Toast.makeText(this.applicationContext, itemValue, Toast.LENGTH_SHORT).show()
     }
 }

@@ -7,7 +7,7 @@ object MainContract {
     interface Presenter : LifecyclePresenter<View>
 
     interface View {
-        fun displayData(dataList: List<String>)
+        fun displayData(dataList: List<Int>)
     }
 
 }

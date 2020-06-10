@@ -37,9 +37,8 @@ dependencies {
     implementation "com.bluelinelabs:conductor-support:3.0.0-rc2"
 
     implementation "com.airbnb.android:epoxy:3.11.0"
-    kapt "com.airbnb.android:epoxy-processor:3.11.0"
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
