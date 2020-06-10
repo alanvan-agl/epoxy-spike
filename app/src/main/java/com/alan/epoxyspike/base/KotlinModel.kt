@@ -51,14 +51,6 @@ abstract class KotlinModel(
 
     override fun getDefaultLayout() = layoutRes
 
-    override fun equals(other: Any?): Boolean {
-        return if (super.equals(other)) {
-            (other as KotlinModel?)?.hashCode() == hashCode()
-        } else {
-            false
-        }
-    }
-
     protected open fun <V : View> bind(@IdRes parentId: Int, @IdRes childId: Int) =
         object : ReadOnlyProperty<KotlinModel, V> {
 
@@ -89,4 +81,22 @@ abstract class KotlinModel(
         }
 
     protected fun <V : View> bind(@IdRes id: Int) = bind<V>(View.NO_ID, id)
+
+    override fun equals(other: Any?): Boolean {
+        return if (super.equals(other)) {
+            (other as KotlinModel?)?.hashCode() == hashCode()
+        } else {
+            false
+        }
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + layoutRes
+        result = 31 * result + (view?.hashCode() ?: 0)
+        result = 31 * result + viewBindings.hashCode()
+        result = 31 * result + nestedViewBindings.hashCode()
+        result = 31 * result + isBound.hashCode()
+        return result
+    }
 }

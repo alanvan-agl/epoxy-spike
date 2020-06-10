@@ -1,6 +1,7 @@
 package com.alan.epoxyspike.main.epoxy_models
 
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.alan.epoxyspike.R
 import com.alan.epoxyspike.base.KotlinModel
 
@@ -19,6 +20,7 @@ class EpoxyItemType2(
     override fun bind() {
         val value = context!!.getString(R.string.type2, data + 1)
         textView.text = value
+        textView.setTextColor(ContextCompat.getColor(context!!, R.color.colorGreen))
         textView.setOnClickListener {
             onClickCallback(value)
         }
