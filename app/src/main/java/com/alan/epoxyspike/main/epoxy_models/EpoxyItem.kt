@@ -22,20 +22,4 @@ class EpoxyItem(
             onClickCallback()
         }
     }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is EpoxyItem) return false
-        if (!super.equals(other)) return false
-
-        if (data != other.data) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = super.hashCode()
-        result = 31 * result + data.hashCode()
-        return result
-    }
 }
