@@ -14,4 +14,8 @@ class MainPresenter : MainContract.Presenter {
     override fun onDetach() {
         this.view = null
     }
+
+    override fun onItemClicked(itemValue: String) {
+        view?.showItemClicked(itemValue)
+    }
 }

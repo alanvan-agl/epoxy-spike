@@ -9,7 +9,7 @@ import com.airbnb.epoxy.EpoxyRecyclerView
 import com.alan.epoxyspike.R
 import com.bluelinelabs.conductor.Controller
 
-class MainController : Controller(), MainContract.View, MainAdapter.ActionListener {
+class MainController : Controller(), MainContract.View {
 
     private lateinit var presenter: MainContract.Presenter
     private lateinit var adapter: MainAdapter
@@ -24,7 +24,7 @@ class MainController : Controller(), MainContract.View, MainAdapter.ActionListen
     }
 
     private fun setupRecyclerView(view: View) {
-        adapter = MainAdapter(this)
+        adapter = MainAdapter(presenter)
         recyclerView?.layoutManager = LinearLayoutManager(view.context)
         recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView?.setController(adapter)
@@ -44,7 +44,7 @@ class MainController : Controller(), MainContract.View, MainAdapter.ActionListen
         adapter.setData(dataList)
     }
 
-    override fun onItemClicked(itemValue: String) {
+    override fun showItemClicked(itemValue: String) {
         Toast.makeText(this.applicationContext, itemValue, Toast.LENGTH_SHORT).show()
     }
 }
